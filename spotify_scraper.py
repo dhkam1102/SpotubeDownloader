@@ -30,11 +30,15 @@ def fetch_playlist_tracks(username, playlist_id):
         tracks.extend(results['items'])
     return tracks
 
-def print_playlist_tracks(tracks):
-    for i, item in enumerate(tracks):
-        track = item['track']
-        print(f"{i + 1}: {track['name']} by {track['artists'][0]['name']}")
+def write_tracks_to_file(tracks, filename="playlist_songs.txt"):
+    with open(filename, "w") as file:
+        for i, item in enumerate(tracks):
+            track = item['track']
+            track_name = track['name']
+            artist_name = track['artists'][0]['name']
+            file.write(f"{i + 1}: {track_name} by {artist_name}\n")
+    print(f"Tracks written to {filename}")
 
 if __name__ == "__main__":
     tracks = fetch_playlist_tracks(username, playlist_id)
-    print_playlist_tracks(tracks)
+    write_tracks_to_file(tracks)
