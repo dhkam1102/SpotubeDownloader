@@ -17,7 +17,12 @@ def youtube_search(query, max_results = 1):
     videos = []
     for search_result in search_response.get('items', []):
         if search_result['id']['kind'] == 'youtube#video':
-            videos.append(f"Title: {search_result['snippet']['title']}, URL: https://www.youtube.com/watch?v={search_result['id']['videoId']}")
+            video_url = f"https://www.youtube.com/watch?v={search_result['id']['videoId']}"
+            video_title = search_result['snippet']['title']
+            videos.append(f"Title: {video_title}, URL: {video_url}")
+
+            with open('youtube_urls.txt', 'w') as file:
+                file.write(video_url + '\n')
 
     return videos
 
