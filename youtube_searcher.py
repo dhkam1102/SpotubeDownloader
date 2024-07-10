@@ -5,7 +5,7 @@ load_dotenv()
 
 YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY')
 
-def youtube_search(query, max_results=2):
+def youtube_search(query, max_results = 1):
     youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY)
 
     search_response = youtube.search().list(
