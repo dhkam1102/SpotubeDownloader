@@ -31,17 +31,17 @@ def download_songs_from_file(file_path, output_path):
     with open(file_path, 'r') as file:
         urls = file.readlines()
 
-for url in urls:
-        url = url.strip()
-        download_audio_from_youtube(url, output_path)
+    for url in urls:
+            url = url.strip()
+            download_audio_from_youtube(url, output_path)
 
-        # Find the downloaded file by looking for the MP3 file in the output path
-        for file in os.listdir(output_path):
-            if file.endswith(".mp3"):
-                file_path = os.path.join(output_path, file)
-                # Compress the downloaded file
-                zip_path = compress_file(file_path)
-                print(f"Compressed {file} to {zip_path}")
+            # Find the downloaded file by looking for the MP3 file in the output path
+            for file in os.listdir(output_path):
+                if file.endswith(".mp3"):
+                    file_path = os.path.join(output_path, file)
+                    # Compress the downloaded file
+                    zip_path = compress_file(file_path)
+                    print(f"Compressed {file} to {zip_path}")
 
 
 if __name__ == "__main__":
