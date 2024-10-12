@@ -82,7 +82,10 @@ SpotubeDownloader/
 │   ├── downloader.py         # Downloads songs from YouTube and compresses the files
 │   └── db_manager.py         # Manages the SQLite database for tracking downloaded media
 ├── youtube_to_spotify/
-│   └── (Future Implementation)
+│   ├── main.py               # Main script for fetching songs from YouTube and adding them to Spotify
+│   ├── spotify_searcher.py   # Searches Spotify for songs extracted from YouTube
+│   ├── youtube_scraper.py    # Extracts song data from YouTube video descriptions or comments
+│   └── requirements.txt      # Python dependencies for this section of the project
 ├── venv/                     # Virtual environment
 ├── .env                      # API keys and configuration (not included in the repo)
 ├── requirements.txt          # List of required Python packages
