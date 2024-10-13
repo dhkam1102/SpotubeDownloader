@@ -2,9 +2,9 @@ import os
 from dotenv import load_dotenv
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-import spotify_to_youtube.spotify_scraper as spotify_scraper  
-import spotify_to_youtube.youtube_searcher as youtube_searcher 
-import spotify_to_youtube.downloader as downloader
+import spotify_scraper as spotify_scraper  
+import youtube_searcher as youtube_searcher 
+import downloader as downloader
 from db_manager import create_table, insert_song, check_song_exists
 
 # Load environment variables
@@ -68,15 +68,12 @@ def search_and_download(tracks):
         print(f"Inserted '{song_name}' into the database.")
 
 def main():
-    # Step 1: Create the database table (only needed once)
     create_table()
 
-    # Step 2: Fetch Spotify playlist tracks
     print("Fetching Spotify playlist tracks...")
     tracks = spotify_scraper.fetch_playlist_tracks(username, playlist_id)
     spotify_scraper.write_tracks_to_file(tracks)
 
-    # Step 3: Search and download from YouTube
     search_and_download(tracks)
 
 if __name__ == "__main__":

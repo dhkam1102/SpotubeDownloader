@@ -29,6 +29,7 @@ def fetch_playlist_tracks(username, playlist_id):
     try:
         results = sp.user_playlist_tracks(username, playlist_id)
         tracks = results['items']
+        #going over the pages
         while results['next']:
             results = sp.next(results)
             tracks.extend(results['items'])
