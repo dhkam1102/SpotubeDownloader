@@ -14,7 +14,6 @@ def fetch_video_description(video_id):
     if 'items' in response and len(response['items']) > 0:
         return response['items'][0]['snippet']['description']
     return None
-
 def extract_song_titles(text):
     """
     Extract song titles from text (description or comment).
@@ -24,18 +23,18 @@ def extract_song_titles(text):
         r'(\d{1,2}:\d{2}(?::\d{2})?)\s*[-–—]\s*(.+?)(?=\n\d{1,2}:\d{2}|\Z)',  # Matches '00:00 - Song Title'
         r'(\d{1,2}:\d{2}(?::\d{2})?)\s*(.+?)\s*[-–—]\s*(.+?)(?=\n\d{1,2}:\d{2}|\Z)',  # Matches '00:00 Artist - Song Title'
         r'(\d{1,2}:\d{2}(?::\d{2})?)\s*(.+?)(?=\n\d{1,2}:\d{2}|\Z)',  # Matches '00:00 Song Title'
-        r'(?<=\n|^)([^:\n]+?)\s*[-–—]\s*(.+?)(?=\n|$)',  # Matches 'Artist - Song Title' without timestamp
+        r'^[^:\n]+?\s*[-–—]\s*.+?(?=\n|$)',  # Fixed: Matches 'Artist - Song Title' without timestamp
         r'"(.+?)"\s*(?:by|[-–—])\s*(.+?)(?=\n|$)',  # Matches '"Song Title" by Artist'
         r'(\d{1,2}:\d{2}(?::\d{2})?)\s*[|\[]\s*(.+?)\s*[|\]]',  # Matches '00:00 | Song Title' or '00:00 [Song Title]'
-        r'(?<=\n|^)(\d+)[.)\s]\s*(.+?)(?=\n|$)',  # Matches '1. Song Title' or '1) Song Title'
-        r'(?<=\n|^)Track\s*(\d+)\s*[:.-]\s*(.+?)(?=\n|$)',  # Matches 'Track 1: Song Title' or 'Track 1 - Song Title'
-        r'(?<=\n|^)(.+?)\s*[-–—]\s*(.+?)\s*\((\d{1,2}:\d{2}(?::\d{2})?)\)',  # Matches 'Artist - Song Title (00:00)'
-        r'(?<=\n|^)\[(.+?)\]\s*[-–—]\s*(.+?)(?=\n|$)',  # Matches '[Artist] - Song Title'
-        r'(?<=\n|^)(.+?)\s*//\s*(.+?)(?=\n|$)',  # Matches 'Artist // Song Title'
-        r'(?<=\n|^)(.+?)\s*[:]\s*(.+?)(?=\n|$)',  # Matches 'Artist: Song Title'
-        r'(?<=\n|^)(.+?)\s*[-–—]\s*"(.+?)"(?=\n|$)',  # Matches 'Artist - "Song Title"'
-        r'(?<=\n|^)(\d{1,2}:\d{2}(?::\d{2})?)\s*(.+?)\s*[-–—]\s*(.+?)\s*[(](.+?)[)](?=\n|$)',  # Matches '00:00 Artist - Song Title (Album)'
+        r'^\d+[.)\s]\s*(.+?)(?=\n|$)',  # Fixed: Matches '1. Song Title' or '1) Song Title'
+        r'^Track\s*\d+\s*[:.-]\s*(.+?)(?=\n|$)',  # Fixed: Matches 'Track 1: Song Title'
+        r'^\[(.+?)\]\s*[-–—]\s*(.+?)(?=\n|$)',  # Fixed: Matches '[Artist] - Song Title'
+        r'^(.+?)\s*//\s*(.+?)(?=\n|$)',  # Fixed: Matches 'Artist // Song Title'
+        r'^(.+?)\s*[:]\s*(.+?)(?=\n|$)',  # Fixed: Matches 'Artist: Song Title'
+        r'^(.+?)\s*[-–—]\s*"(.+?)"(?=\n|$)',  # Fixed: Matches 'Artist - "Song Title"'
+        r'^(\d{1,2}:\d{2}(?::\d{2})?)\s*(.+?)\s*[-–—]\s*(.+?)\s*[(](.+?)[)](?=\n|$)'  # Fixed: Matches '00:00 Artist - Song Title (Album)'
     ]
+
 
     song_titles = []
     for pattern in patterns:
@@ -64,7 +63,7 @@ def extract_song_titles(text):
 def fetch_video_comments(video_id):
     youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY)
     comments = []
-    request = youtube.commentThreads().list(part="snippet", videoId=video_id, maxResults=100)
+    request = youtube.commentThreads().list(part="snippet", videoId=video_id, maxResults=10)
     
     while request:
         response = request.execute()
@@ -87,7 +86,7 @@ def get_song_titles(video_id):
     return list(dict.fromkeys(all_titles))  # Remove duplicates while preserving order
 
 # Example usage
-video_id = "dQw4w9WgXcQ"  # Replace with actual video ID
+video_id = "6_p7BEFMdFs"  # Replace with actual video ID
 song_titles = get_song_titles(video_id)
 for title in song_titles:
     print(title)
